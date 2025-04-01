@@ -7,20 +7,17 @@ import type { NewCommunity } from '../../interfaces/communities/communities.inte
 import type { InputConfig } from 'src/interfaces/input-config.interface';
 import GenericCreateForm from '../shared/views/GenericCreateForm.vue';
 
-// Configuración del breadcrumb
 const breadcrumbRoutes = [
   { label: 'Comunidades', to: { name: 'communities-default' } },
   { label: 'Crear', to: { name: 'communities-create' } },
 ];
 
-// Configuración de los campos del formulario
 const inputs:InputConfig[] = [
   { inputId: 'communityName', label: 'Nombre de la comunidad', inputType: 'input',  },
   { inputId: 'userId', label: 'Manager', inputType: 'select',  },
   { inputId: 'companyId', label: 'Compañía', inputType: 'select', },
 ];
 
-// Función para cargar opciones de selects
 const loadOptions = async () => {
   const [companies, users] = await Promise.all([
     CompaniesServices.getCompanies(),
@@ -33,7 +30,7 @@ const loadOptions = async () => {
   };
 };
 
-// Función para crear la entidad
+
 const createEntity = async (data: NewCommunity) => {
   await CommunitiesServices.createCommunity(data);
 };

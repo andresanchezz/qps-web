@@ -13,8 +13,8 @@ import { useRouter } from 'vue-router';
 import type { CalendarInterface } from '../../../interfaces/calendar/calendar.interface';
 import { CalendarServices } from '../calendar.services';
 import type { EventInput } from '@fullcalendar/core/index.js';
-import tippy from 'tippy.js'; // Importa Tippy.js
-import 'tippy.js/dist/tippy.css'; // Importa los estilos de Tippy.js
+import tippy from 'tippy.js'; 
+import 'tippy.js/dist/tippy.css';
 
 const router = useRouter();
 
@@ -61,10 +61,9 @@ const calendarOptions = ref({
 });
 
 const getEventColor = (status: string): string => {
-  // Normalizar el valor de status (minúsculas y sin espacios)
   const statusFormatted = status ? status.toLowerCase().trim() : '';
 
-  // Asignar el color según el estado
+
   switch (statusFormatted) {
     case "created":
       return '#da1919'; // Rojo

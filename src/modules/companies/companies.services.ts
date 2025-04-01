@@ -17,7 +17,6 @@ export class CompaniesServices {
             const { data } = await apiServicesQps.get(`/companies?page=${page}&take=${take}`)
             return data
         } catch (error) {
-            console.log(error)
             return {
                 data: [],
                 meta: genericNullObject.meta
@@ -44,7 +43,6 @@ export class CompaniesServices {
     static async createCompany(companyName: string) {
         try {
             const { data } = await apiServicesQps.post('/companies', { companyName })
-            console.log(data)
         } catch (error: any) {
             throw new Error(error)
         } finally {

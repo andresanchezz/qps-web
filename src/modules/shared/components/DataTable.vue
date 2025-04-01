@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useToast } from 'primevue/usetoast';
 import { Column, DataTable, InputText, Button, Skeleton, Paginator } from "primevue";
 import MyDeleteToast from "./MyDeleteToast.vue";

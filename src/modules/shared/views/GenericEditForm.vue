@@ -161,10 +161,10 @@ const updateEntity = async () => {
 onMounted(async () => {
   const data = await props.loadData(entityId);
 
-  // Actualiza las opciones de los selects
+
   updateSelectOptions(data);
 
-  // Llena los valores iniciales
+
   fillInitialData(data, entityData.value);
 });
 </script>

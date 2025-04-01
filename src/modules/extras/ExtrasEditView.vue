@@ -36,12 +36,9 @@ const loadData = async (id: string) => {
 };
 
 const updateEntity = async (id: string, data: any) => {
-  /* try { */
+
   await ExtrasServices.updateExtra(id, data);
-  /*  showToast(toast, { severity: 'success', summary: 'Extra updated' });
- } catch (error) {
-   showToast(toast, { severity: 'error', summary: "Extra wasn't updated" });
- } */
+
 };
 </script>
 

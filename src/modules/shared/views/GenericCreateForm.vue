@@ -54,8 +54,8 @@ onMounted(async () => {
     } catch (error) {
       showToast(toast, {
         severity: 'error',
-        summary: 'Error al cargar opciones',
-        detail: 'No se pudieron cargar las opciones para los campos.',
+        summary: 'Error loading options',
+        detail: "Couldn't load fields options",
       });
     }
   }
@@ -64,18 +64,15 @@ onMounted(async () => {
 const createEntity = async (leave: boolean) => {
   isFormSubmitted.value = true;
 
-  // Validación de campos requeridos
   const errors = props.inputs
     .filter((input) => {
       if (input.required === undefined || true) {
         const value = entityData.value[input.inputId];
 
-        // Verifica si el valor está vacío
         if (input.inputType === 'input' || input.inputType === 'numeric') {
           return !value || value.toString().trim() === '';
         }
 
-        // Verifica si el valor está vacío para selects y datepickers
         if (input.inputType === 'select' || input.inputType === 'datepicker') {
           return !value || value === '';
         }
@@ -84,21 +81,20 @@ const createEntity = async (leave: boolean) => {
     })
     .map((input) => input.label);
 
-  // Si hay errores, muestra un toast y detén la ejecución
   if (errors.length > 0) {
     showToast(toast, {
       severity: 'error',
-      summary: 'Campos requeridos',
-      detail: `Los siguientes campos son obligatorios: ${errors.join(', ')}`,
+      summary: 'Missing required fields',
+      detail: `The following fields are required: ${errors.join(', ')}`,
     });
-    return; // Detén la ejecución si hay errores
+    return;
   }
 
   if (errors.length > 0) {
     showToast(toast, {
       severity: 'error',
-      summary: 'Campos requeridos',
-      detail: `Los siguientes campos son obligatorios: ${errors.join(', ')}`,
+      summary: 'Missing required fields',
+      detail: `The following fields are required: ${errors.join(', ')}`,
     });
     return;
   }
@@ -112,16 +108,16 @@ const createEntity = async (leave: boolean) => {
       }
     });
 
-    // Llamar a la función de creación
+
     await props.createEntity(dataToCreate);
-    showToast(toast, { severity: 'success', summary: 'Entidad creada', detail: 'La entidad se creó correctamente.' });
+    showToast(toast, { severity: 'success', summary: 'Created', detail: 'Created correctly' });
     if (leave) router.back()
-    // Resetear el formulario después de una creación exitosa
+
     props.inputs.forEach((input) => {
       entityData.value[input.inputId] = '';
     });
   } catch (error) {
-    showToast(toast, { severity: 'error', summary: 'Error al crear', detail: 'No se pudo crear la entidad.' });
+    showToast(toast, { severity: 'error', summary: 'Error creating', detail: "Wasn't created" });
   } finally {
     isFormSubmitted.value = false;
   }
@@ -148,7 +144,6 @@ const clearForm = () => {
 
       <div v-if="inputs.length % 2 !== 0"></div>
 
-      <!-- Botón de creación -->
       <div class="flex">
         <LoadingButton label="Create" @click="createEntity(false)"></LoadingButton>
         <div class="px-4">

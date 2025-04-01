@@ -23,7 +23,7 @@ const inputs: InputConfig[] = [
 ];
 
 const keyValueMap = {
-  communityId: 'community.id', // Mapea communityId a community.id
+  communityId: 'community.id', 
 };
 
 const loadData = async (id: string) => {

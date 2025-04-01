@@ -14,7 +14,6 @@ const authGuard = (
   const isAuthenticated = authStore.token;
 
   if (!isAuthenticated) {
-    // Si no está autenticado, redirige a la página de autenticación
     if (to.path !== '/auth') {
       next('/auth');
     } else {
@@ -25,8 +24,6 @@ const authGuard = (
 
   const userRole = userStore?.userData?.role.name.toLowerCase() as keyof typeof roleRoutes;
   const allowedRoutes = roleRoutes[userRole] || [];
-  console.log(userRole);
-  console.log(to.name);
   if (allowedRoutes.includes(to.name as string)) {
     next();
   } else {

@@ -22,7 +22,6 @@ export class ExtrasServices {
                 meta: data.meta
             }
         } catch (error) {
-            console.log(error)
             return {
                 data: [],
                 meta: genericNullObject.meta
@@ -38,7 +37,6 @@ export class ExtrasServices {
 
         try {
             const { data } = await apiServicesQps.post('/extras', newExtra)
-            console.log(data)
         } catch (error: any) {
             throw new Error(error)
         } finally {
