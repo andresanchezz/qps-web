@@ -185,6 +185,10 @@ const updateService = async () => {
       delete payload.userId
     }
 
+    if(userStore.userData?.roleId === "3"){
+      delete payload.userId
+    }
+
     await CleanersServices.updateService(entityId, payload);
     showToast(toast, { severity: 'success', detail: 'Service was updated' });
   } catch (error) {
