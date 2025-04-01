@@ -7,12 +7,13 @@ import { useGlobalStateStore } from "../../../store/auth.store";
 import { storeToRefs } from "pinia";
 import router from "../../../router";
 import { useUserStore } from "../../../store/user.store";
-import { CleanersServices } from "../../../../src/modules/services/services.services";
-import type { EditService, Service } from "../../../../src/interfaces/services/services.interface";
+import {  CleanerServiceAdapterExternal, type EditService, type ExternalService, type Service } from "../../../../src/interfaces/services/services.interface";
 import MyConfirmToast from "./MyCompleteToast.vue";
 import MyAcceptToast from "./MyAcceptToast.vue";
 import MyRejectToast from "./MyRejectToast.vue";
 import { showToast } from "../../../../src/utils/show-toast";
+import { CleanersServices } from "../services.services";
+
 
 
 interface TableI {
@@ -47,7 +48,8 @@ const redirectToEdit = (id: string) => {
 }
 
 const itemToDelete = ref<Service | null>();
-const itemToUpdate = ref<Service | null>();
+const itemToUpdate = ref<EditService | null>();
+const itemToUpdateId = ref('');
 
 const showDeleteToast = (item: Service) => {
     itemToDelete.value = item;
@@ -71,8 +73,11 @@ const closeDeleteToast = () => {
 };
 
 //** ACCEPT, REJECT OR CONFIRM TOAST */
-const showToastByAction = (item: Service, newStatus: string) => {
-    itemToUpdate.value = item;
+const showToastByAction = (item: ExternalService, newStatus: string) => {
+    console.log(item);
+    itemToUpdateId.value = item.id
+    const internalItem = CleanerServiceAdapterExternal.externalToInternal(item);
+    itemToUpdate.value = internalItem;
 
     let group: string;
     let summary: string;
@@ -111,31 +116,22 @@ const handleAction = async (newStatus: string, group: string, comment?: string) 
 };
 
 const handleCleanerDecision = async (newStatus: string, comment?: string) => {
-
     if (!itemToUpdate.value) return;
 
-    const extraIds = itemToUpdate.value.extrasByServices.map((extra) => extra.extraId);
-
+    // Convertimos itemToUpdate a EditService
     const updatedService: EditService = {
-        comment: itemToUpdate.value.comment || '',
-        communityId: itemToUpdate.value.communityId,
-        date: itemToUpdate.value.date,
-        extraId: extraIds,
-        schedule: itemToUpdate.value.schedule,
+        ...itemToUpdate.value,
         statusId: newStatus,
-        typeId: itemToUpdate.value.typeId,
-        unitNumber: itemToUpdate.value.unitNumber,
-        unitySize: itemToUpdate.value.unitySize,
         userComment: comment || itemToUpdate.value.userComment || '',
         userId: itemToUpdate.value.userId || store.userData?.id || '',
     };
 
-    await CleanersServices.updateService(itemToUpdate.value.id, updatedService);
+    await CleanersServices.updateService(itemToUpdateId.value, updatedService);
 
-    showToast(toast, { summary: 'Service status updated', severity: 'success' })
-    emit('update')
-
+    showToast(toast, { summary: 'Service status updated', severity: 'success' });
+    emit('update');
 };
+
 
 const closeToastByAction = (group: string) => {
     toast.removeGroup(group);
@@ -169,13 +165,13 @@ const closeToastByAction = (group: string) => {
                 </Column>
 
                 <Column v-if="store.userData?.roleId === '4'" field="actions" style="width: 25%">
-                    <template #body="{ data }: { data: Service }">
+                    <template #body="{ data }: { data: ExternalService }">
                         <div class="flex justify-around">
 
-                            <Button v-if="data.statusId == '1'" variant="text" icon="pi pi-check" severity="warn"
+                            <Button v-if="data.statusId == '2'" variant="text" icon="pi pi-check" severity="warn"
                                 label="Accept" @click="showToastByAction(data, '3')" />
 
-                            <Button v-if="data.statusId === '1'" variant="text" icon="pi pi-times" severity="danger"
+                            <Button v-if="data.statusId === '2'" variant="text" icon="pi pi-times" severity="danger"
                                 label="Reject" @click="showToastByAction(data, '4')" />
 
                             <Button v-if="data.statusId === '3'" variant="text" icon="pi pi-verified" severity="warn"

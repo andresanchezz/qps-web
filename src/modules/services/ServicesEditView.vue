@@ -33,7 +33,7 @@ const breadcrumbRoutes = [
 
 const isFormSubmitted = ref(false);
 
-// Variable adicional para el DatePicker (tipo Date)
+
 const scheduleDate = ref<Date>(moment().toDate());
 
 const fillInitialData = (service: Service) => {
@@ -51,13 +51,12 @@ const fillInitialData = (service: Service) => {
     userId: service.userId || '',
   };
 
-  // Convertir el schedule inicial a un objeto Date para el DatePicker
   scheduleDate.value = moment(service.schedule, 'HH:mm:ss').toDate();
 };
 
 const updatedService = ref<EditService>({
   date: moment().format('YYYY-MM-DD'),
-  schedule: moment().format('HH:mm:ss'), // Mantener como string
+  schedule: moment().format('HH:mm:ss'), 
   comment: '',
   communityId: '',
   extraId: [],
@@ -142,12 +141,10 @@ watch(() => updatedService.value.communityId, (newCommunityId) => {
   }
 });
 
-// Observar cambios en el campo "scheduleDate" para actualizar "updatedService.schedule"
 watch(
   () => scheduleDate.value,
   (newScheduleDate) => {
     if (newScheduleDate) {
-      // Formatear la hora como string y asignarla a updatedService.schedule
       updatedService.value.schedule = moment(newScheduleDate).format('HH:mm:ss');
     }
   }
@@ -249,7 +246,7 @@ onMounted(async () => {
       :options="unitSizeOptions" :is-form-submitted="isFormSubmitted" />
 
     <!-- Campo: Número de unidad -->
-    <MyInputGroup v-model="updatedService.unitNumber" label="Unit number" inputType="numeric" inputId="unit-number"
+    <MyInputGroup v-model="updatedService.unitNumber" label="Unit number" inputType="input" inputId="unit-number"
       :is-form-submitted="isFormSubmitted" input-numeric-mode="decimal" />
 
     <!-- Campo: Comunidad -->
@@ -267,7 +264,7 @@ onMounted(async () => {
     <!-- Campo: Extras -->
     <fieldset>
       <label for="extras">Extras</label>
-      <MultiSelect v-model="updatedService.extraId" :options="extrasOptions" optionLabel="label" optionValue="value"
+      <MultiSelect v-model="updatedService.extraId" :options="extras.data.map((e) => ({ label: e.item, value: e.id }))" optionLabel="label" optionValue="value"
         placeholder="Select Extras" class="w-full md:w-80" />
     </fieldset>
 
